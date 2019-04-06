@@ -25,7 +25,7 @@ info.addEventListener('click', function(event) {
     let target = event.target;
     if(target.className == 'info-header-tab') {
         for (let i = 0; i < tab.length; i++) {
-            if (tatget == tab[i]) {
+            if (target == tab[i]) {
                 showTabContent(i);
                 break;
             }
