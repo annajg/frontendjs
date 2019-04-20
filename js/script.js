@@ -1,71 +1,107 @@
-let money,
-name,
-time
+window.addEventListener('DOMContentLoaded', function() {
 
-function start() {
-	money = prompt("Ваш бюджет?");
+    let tab = document.getElementsByClassName('info-header-tab'),
+        tabContent = document.getElementsByClassName('info-tabcontent'),
+        info = document.getElementsByClassName('info-header')[0];
 
-	while(isNaN(money) || money == "" || money == null) {
-		money = prompt("Ваш бюджет?");
-	}
+    function hideTabContent(a) {
+        for (let i = a; i < tabContent.length; i++){
+            tabContent[i].classList.remove('show');
+            tabContent[i].classList.add('hide');
+        }
+    }
 
-	name = prompt("Название вашего магазина?").toUpperCase();
-	time = 21;
+    hideTabContent(1)
+
+function showTabContent(b) {
+    if (tabContent[b].classList.contains('hide')) {
+        hideTabContent(0);
+        tabContent[b].classList.remove('hide');
+        tabContent[b].classList.add('show');
+    }
 }
-start();
 
-let mainList = {
-	budget: money,
-	shopName: name,
-	shopGoods: [],
-	employers: {},
-	open: false,
-	discount: false,
-	shopItems: [],
-	chooseGoods: function chooseGoods() {
-		for (let i = 0; i < 5; i++) {
-			let a = prompt("Какой тип товаров будем продавать?", '');
+info.addEventListener('click', function(event) {
+    let target = event.target;
+    if(target.className == 'info-header-tab') {
+        for (let i = 0; i < tab.length; i++) {
+            if (target == tab[i]) {
+                showTabContent(i);
+                break;
+            }
+        }
+    };
+});
 
-			if ((typeof(a)) === "string" && (typeof(a)) != null && a != '' && a.length < 50 ) {
-				console.log('Good!');
-				mainList.shopGoods[i] = a;
-			} else {
-				i = i - 1;		
-			}
-		}
-	},
-	worktime: function worktime(time) {
-		if (time < 0) {
-			console.log('R U fuckin kiddin me?');
-		} else if (time > 8 && time < 20) {
-			console.log('Work, bitch!');
-			mainList.open = true;
-		} else if (time < 24) {
-			console.log('Too late');
-		} else {
-			console.log('Not on this planet');
-		}
-	},
-	dayBudget: function dayBudget() {
-		alert("Everyday budget" + mainList.budget / 30);
-	},
-	makeDiscount: function makeDiscount() {
-		if (mainList.discount == true) {
-			price = (price/100)*80;
-		}
-	},
-	hireEmployers: function hireEmployers() {
-		for (let i = 1; i < 4; i++) {
-			let name = prompt("Employer name");
-			mainList.employers[i] = name;
-		}
-	},
-	chooseShopItems: function chooseShopItems() {
-		let items = prompt("Перечислите через запятую товары", "");
+// Timer
 
-		mainList.shopItems = items.split(",");
-		mainList.shopItems.push(prompt("More", ""));
-		mainList.shopItems.sort();
-	}
-}	
-console.log(mainList);
+    let deadline = "2019-05-12 04:00";
+
+    function getTimeRemaining(endtime) {
+        let t = Date.parse(endtime) - Date.parse(new Date()),
+        seconds = Math.floor( (t/1000) % 60),
+        minutes = Math.floor( (t/1000/60) % 60),
+        hours = Math.floor( t/(1000*60*60));
+
+        return {
+            'total': t,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        };
+    };
+
+    function setClock(id, endtime) {
+
+        let timer = document.getElementById(id),
+            hours = timer.querySelector('.hours'),
+            minutes = timer.querySelector('.minutes'),
+            seconds = timer.querySelector('.seconds');
+
+            function updateClock() {
+                let t = getTimeRemaining(endtime);
+                hours.innerHTML = t.hours;
+                minutes.innerHTML = t.minutes;
+                seconds.innerHTML = t.seconds;
+
+                if (t.total <= 0) {
+                    clearInterval(timeInterval);
+                }
+            };
+
+            updateClock();
+            let timeInterval = setInterval(updateClock, 1000);
+    };
+    setClock('timer', deadline)
+
+    // Modal
+
+    let more = document.querySelector('.more'),
+        overlay = document.querySelector('.overlay'),
+        close = document.querySelector('.popup-close');
+
+    more.addEventListener('click', function() {
+        this.classList.add('more-splash');
+        overlay.style.display = "block";
+        document.body.style.overflow = 'hidden';
+    
+    });
+    close.addEventListener('click', function() {
+        overlay.style.display = "none";
+        more.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    });
+
+});
+
+// urok 10
+
+class options {
+    constructor(height, width, bg, fontSize, textAlign) {
+        this.height = height;
+        this.width = width;
+        this.bg = bg;
+        this.fontSize = fontSize;
+        this.textAlign = textAlign;
+    }   
+}
